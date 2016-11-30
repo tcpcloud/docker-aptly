@@ -41,3 +41,28 @@ Run aptly action, eg. list repos:
 .. code-block:: bash
 
     docker run -it -v /srv/aptly:/var/lib/aptly tcpcloud/aptly-api aptly repo list
+
+aptly-publisher
+===============
+
+Usage
+-----
+
+You can use aptly-publisher in a similar way as if it's installed on your
+system.
+
+Run using docker:
+
+.. code-block:: bash
+
+    docker run -it tcpcloud/aptly-publisher --help
+
+Or create ``/usr/local/bin/aptly-publisher`` with following:
+
+.. code-block:: bash
+
+    #!/bin/bash -e
+
+    docker run -it tcpcloud/aptly-publisher $@
+
+and set exec permissions with ``chmod +x /usr/local/bin/aptly-publisher``.
