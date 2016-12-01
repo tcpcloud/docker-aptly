@@ -8,6 +8,10 @@ This repository contains Docker images for Aptly components and tools.
 
   - Container running ``aptly api serve``
 
+- aptly-public
+
+  - Container running nginx and serving aptly's public directory
+
 - aptly-publisher
 
   - Container with ``aptly-publisher`` tool for management of Aptly publishes,
@@ -34,13 +38,29 @@ Run aptly API:
 
 .. code-block:: bash
 
-    docker run -it -v /srv/aptly:/var/lib/aptly tcpcloud/aptly-api
+    docker run -v /srv/aptly:/var/lib/aptly tcpcloud/aptly-api
 
 Run aptly action, eg. list repos:
 
 .. code-block:: bash
 
     docker run -it -v /srv/aptly:/var/lib/aptly tcpcloud/aptly-api aptly repo list
+
+aptly-public
+============
+
+To be able to provide access to repository, you can use ``aptly-web`` image
+which will run Nginx to serve aptly's public directory.
+
+Usage
+-----
+
+Simply bind-mount public directory on your aptly volume as ``/var/www/html``,
+eg.:
+
+.. code-block:: bash
+
+    docker run -v /srv/aptly/public:/var/www:ro tcpcloud/aptly-public
 
 aptly-publisher
 ===============
@@ -63,6 +83,7 @@ Or create ``/usr/local/bin/aptly-publisher`` with following:
 
     #!/bin/bash -e
 
-    docker run -it tcpcloud/aptly-publisher $@
+    docker run -v $(pwd):/var/run/aptly-publisher:ro -it tcpcloud/aptly-publisher $@
 
 and set exec permissions with ``chmod +x /usr/local/bin/aptly-publisher``.
+Then you are able to use config file in your current directory.

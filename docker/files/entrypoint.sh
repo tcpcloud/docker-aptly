@@ -35,6 +35,10 @@ EOF
 
     echo "Importing distribution keyring.."
     gosu aptly bash -c 'for i in /usr/share/keyrings/*; do gpg --no-default-keyring --keyring $i --export | gpg --import; done'
+
+    echo "Storing public key in ${HOME}/public/public.gpg"
+    [ -d ${HOME}/public ] || gosu aptly bash -c "mkdir ${HOME}/public"
+    [ -e ${HOME}/public/public.gpg ] || gosu aptly bash -c "gpg --armor --export ${EMAIL_ADDRESS} > ${HOME}/public/public.gpg"
 fi
 
 exec gosu aptly "$@"
