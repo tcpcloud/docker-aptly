@@ -4,6 +4,10 @@ Docker Aptly images
 
 This repository contains Docker images for Aptly components and tools.
 
+- aptly
+
+  - Container with aptly tooling
+
 - aptly-api
 
   - Container running ``aptly api serve``

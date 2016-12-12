@@ -1,9 +1,27 @@
 #!/usr/bin/env make -f
 
-all: aptly-api aptly-publisher
+ORG ?= tcpcloud
 
-aptly-api:
-	(cd docker; docker build -t tcpcloud/aptly-api -f aptly-api.Dockerfile .)
+all: aptly aptly-api aptly-publisher aptly-public
+
+aptly:
+	@echo "== Building $(ORG)/aptly .."
+	(cd docker; docker build -t $(ORG)/aptly -f aptly.Dockerfile .)
+
+aptly-api: aptly
+	@echo "== Building $(ORG)/aptly-api .."
+	(cd docker; docker build -t $(ORG)/aptly-api -f aptly-api.Dockerfile .)
 
 aptly-publisher:
-	(cd docker; docker build -t tcpcloud/aptly-publisher -f aptly-publisher.Dockerfile .)
+	@echo "== Building $(ORG)/aptly-publisher .."
+	(cd docker; docker build -t $(ORG)/aptly-publisher -f aptly-publisher.Dockerfile .)
+
+aptly-public:
+	@echo "== Building $(ORG)/aptly-public .."
+	(cd docker; docker build -t $(ORG)/aptly-public -f aptly-public.Dockerfile .)
+
+push:
+	docker push $(ORG)/aptly
+	docker push $(ORG)/aptly-api
+	docker push $(ORG)/aptly-publisher
+	docker push $(ORG)/aptly-public
