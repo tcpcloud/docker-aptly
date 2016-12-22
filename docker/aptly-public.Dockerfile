@@ -5,7 +5,8 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get -q update \
     && apt-get install -y nginx
 
-RUN echo "daemon off;" >>/etc/nginx/nginx.conf
+COPY files/nginx.conf /etc/nginx/nginx.conf
+COPY files/aptly-site.conf /etc/nginx/sites-available/default
 
 EXPOSE 80
 ENTRYPOINT ["/usr/sbin/nginx"]
