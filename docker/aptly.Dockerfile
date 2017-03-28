@@ -15,7 +15,7 @@ RUN apt-get -q update                     \
                           gosu            \
                           ubuntu-archive-keyring \
     && echo "deb http://repo.aptly.info/ squeeze main" > /etc/apt/sources.list.d/aptly.list \
-    && apt-key adv --keyserver keys.gnupg.net --recv-keys 9E3E53F19C7DE460 \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9E3E53F19C7DE460 \
     && apt-get -y install aptly
 
 COPY files/aptly.conf /etc/aptly.conf
