@@ -38,6 +38,10 @@ EOF
 
     echo "Storing public key in ${HOME}/public/public.gpg"
     [ -d ${HOME}/public ] || gosu aptly bash -c "mkdir ${HOME}/public"
+    if [ $(stat -c '%u' ${HOME}/public) != $USER_ID ]; then
+        echo "Fixing ${HOME}/public permissions.."
+        chown -R aptly:aptly ${HOME}/public
+    fi
     [ -e ${HOME}/public/public.gpg ] || gosu aptly bash -c "gpg --armor --export ${EMAIL_ADDRESS} > ${HOME}/public/public.gpg"
 fi
 
