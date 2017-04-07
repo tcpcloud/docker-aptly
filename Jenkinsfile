@@ -48,19 +48,19 @@ node("docker") {
         }
       }
       stage("upload to docker hub"){
-        common.infoMsg("Uploading aptly image")
+        common.infoMsg("Uploading aptly image with tags ${imageTagsList}")
         for(int i=0;i<imageTagsList.size();i++){
           aptly.push(imageTagsList[i])
         }
-        common.infoMsg("Building aptly-api image")
+        common.infoMsg("Uploading aptly-api image with tags ${imageTagsList}")
         for(int i=0;i<imageTagsList.size();i++){
           aptlyApi.push(imageTagsList[i])
         }
-        common.infoMsg("Building aptly-publisher image")
+        common.infoMsg("Uploading aptly-publisher image with tags ${imageTagsList}")
         for(int i=0;i<imageTagsList.size();i++){
           aptlyPublisher.push(imageTagsList[i])
         }
-        common.infoMsg("Building aptly-public image")
+        common.infoMsg("Uploading aptly-public image with tags ${imageTagsList}")
         for(int i=0;i<imageTagsList.size();i++){
           aptlyPublic.push(imageTagsList[i])
         }
