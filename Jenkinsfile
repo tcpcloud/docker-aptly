@@ -53,7 +53,7 @@ node("docker") {
           aptly.push(imageTagsList[i])
         }
         common.infoMsg("Building aptly-api image")
-        for(int i=0;i<imageTagsList.size();i++){q
+        for(int i=0;i<imageTagsList.size();i++){
           aptlyApi.push(imageTagsList[i])
         }
         common.infoMsg("Building aptly-publisher image")
