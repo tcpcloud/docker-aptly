@@ -16,11 +16,11 @@ if [ $(stat -c '%u' ${HOME}) != $USER_ID ]; then
     chown -R aptly:aptly ${HOME}
 fi
 
-if [ ! -e ${HOME}/.gnupg/secret.gpg ]; then
+if [ ! -e ${HOME}/.gnupg ]; then
     echo "Generating new GPG keypair.."
     # Enforce old format instead of new keybox (gpg < 2 compatibility)
-    gosu aptly bash -c "umask 066; mkdir ${HOME}/.gnupg"
-    gosu aptly bash -c "umask 066; touch ${HOME}/.gnupg/secring.gpg ${HOME}/.gnupg/pubring.gpg"
+    gosu aptly bash -c "mkdir ${HOME}/.gnupg; chmod 700 ${HOME}/.gnupg"
+    gosu aptly bash -c "touch ${HOME}/.gnupg/pubring.gpg"
     [ -e ${HOME}/gpg_batch ] || cat << EOF > ${HOME}/gpg_batch
 %echo Generating a default key
 Key-Type: default
