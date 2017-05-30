@@ -18,6 +18,9 @@ fi
 
 if [ ! -e ${HOME}/.gnupg/secret.gpg ]; then
     echo "Generating new GPG keypair.."
+    # Enforce old format instead of new keybox (gpg < 2 compatibility)
+    gosu aptly bash -c "umask 066; mkdir ${HOME}/.gnupg"
+    gosu aptly bash -c "umask 066; touch ${HOME}/.gnupg/secring.gpg ${HOME}/.gnupg/pubring.gpg"
     [ -e ${HOME}/gpg_batch ] || cat << EOF > ${HOME}/gpg_batch
 %echo Generating a default key
 Key-Type: default
