@@ -21,9 +21,10 @@ if [ ! -e ${HOME}/.gnupg ]; then
     echo "Generating new GPG keypair.."
     [ -e ${HOME}/gpg_batch ] || cat << EOF > ${HOME}/gpg_batch
 %echo Generating a default key
-Key-Type: default
+Key-Type: RSA
 Key-Length: ${GPG_KEY_LENGTH}
-Subkey-Type: default
+Subkey-Type: ELG-E
+Subkey-Length 1024
 Name-Real: ${FULL_NAME}
 Name-Comment: Aptly repository signing key
 Name-Email: ${EMAIL_ADDRESS}
