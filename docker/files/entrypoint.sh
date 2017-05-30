@@ -24,7 +24,7 @@ if [ ! -e ${HOME}/.gnupg ]; then
 Key-Type: RSA
 Key-Length: ${GPG_KEY_LENGTH}
 Subkey-Type: ELG-E
-Subkey-Length 1024
+Subkey-Length: 1024
 Name-Real: ${FULL_NAME}
 Name-Comment: Aptly repository signing key
 Name-Email: ${EMAIL_ADDRESS}
