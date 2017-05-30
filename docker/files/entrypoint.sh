@@ -1,13 +1,15 @@
 #!/bin/bash -e
 
 USER_ID=${LOCAL_USER_ID:-501}
+GROUP_ID=${LOCAL_GROUP_ID:-501}
 FULL_NAME=${FULL_NAME:-"Aptly Repo Signing"}
 EMAIL_ADDRESS=${EMAIL_ADDRESS:-root@localhost}
 GPG_KEY_LENGTH=4096
 export HOME=/var/lib/aptly
 
 echo "Creating user aptly with UID $USER_ID"
-useradd --shell /bin/bash -u $USER_ID -d ${HOME} -m aptly
+groupadd --system -g $GROUP_ID aptly
+useradd --system --shell /bin/bash -u $USER_ID -g $GROUP_ID -d ${HOME} -m aptly
 
 if [ $(stat -c '%u' ${HOME}) != $USER_ID ]; then
     echo "Fixing ${HOME} permissions.."
