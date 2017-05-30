@@ -4,7 +4,8 @@ USER_ID=${LOCAL_USER_ID:-501}
 GROUP_ID=${LOCAL_GROUP_ID:-501}
 FULL_NAME=${FULL_NAME:-"Aptly Repo Signing"}
 EMAIL_ADDRESS=${EMAIL_ADDRESS:-root@localhost}
-GPG_KEY_LENGTH=4096
+GPG_KEY_LENGTH=${GPG_KEY_LENGTH:-4096}
+GPG_BINARY=${GPG_BINARY:-gpg1}
 export HOME=/var/lib/aptly
 
 echo "Creating user aptly with UID $USER_ID"
@@ -18,9 +19,6 @@ fi
 
 if [ ! -e ${HOME}/.gnupg ]; then
     echo "Generating new GPG keypair.."
-    # Enforce old format instead of new keybox (gpg < 2 compatibility)
-    gosu aptly bash -c "mkdir ${HOME}/.gnupg; chmod 700 ${HOME}/.gnupg"
-    gosu aptly bash -c "touch ${HOME}/.gnupg/pubring.gpg"
     [ -e ${HOME}/gpg_batch ] || cat << EOF > ${HOME}/gpg_batch
 %echo Generating a default key
 Key-Type: default
@@ -34,10 +32,10 @@ Expire-Date: 0
 %commit
 %echo done
 EOF
-    gosu aptly bash -c "gpg --batch --gen-key ${HOME}/gpg_batch"
+    gosu aptly bash -c "$GPG_BINARY --batch --gen-key ${HOME}/gpg_batch"
 
     echo "Importing distribution keyring.."
-    gosu aptly bash -c 'for i in /usr/share/keyrings/*; do gpg --no-default-keyring --keyring $i --export | gpg --import; done'
+    gosu aptly bash -c "for i in /usr/share/keyrings/*; do $GPG_BINARY --no-default-keyring --keyring \$i --export | $GPG_BINARY --import; done"
 
     echo "Storing public key in ${HOME}/public/public.gpg"
     [ -d ${HOME}/public ] || gosu aptly bash -c "mkdir ${HOME}/public"
@@ -45,7 +43,7 @@ EOF
         echo "Fixing ${HOME}/public permissions.."
         chown -R aptly:aptly ${HOME}/public
     fi
-    [ -e ${HOME}/public/public.gpg ] || gosu aptly bash -c "gpg --armor --export ${EMAIL_ADDRESS} > ${HOME}/public/public.gpg"
+    [ -e ${HOME}/public/public.gpg ] || gosu aptly bash -c "$GPG_BINARY --armor --export ${EMAIL_ADDRESS} > ${HOME}/public/public.gpg"
 fi
 
 exec gosu aptly "$@"
