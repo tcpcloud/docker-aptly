@@ -9,8 +9,8 @@ GPG_BINARY=${GPG_BINARY:-gpg1}
 export HOME=/var/lib/aptly
 
 echo "Creating user aptly with UID $USER_ID"
-groupadd --system -g $GROUP_ID aptly
-useradd --system --shell /bin/bash -u $USER_ID -g $GROUP_ID -d ${HOME} -m aptly
+getent group aptly >/dev/null || groupadd --system -g $GROUP_ID aptly
+getent passwd aptly >/dev/null || useradd --system --shell /bin/bash -u $USER_ID -g aptly -d ${HOME} -m aptly
 
 if [ $(stat -c '%u' ${HOME}) != $USER_ID ]; then
     echo "Fixing ${HOME} permissions.."
