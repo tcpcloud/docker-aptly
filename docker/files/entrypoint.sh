@@ -8,17 +8,17 @@ GPG_KEY_LENGTH=${GPG_KEY_LENGTH:-4096}
 GPG_BINARY=${GPG_BINARY:-gpg1}
 export HOME=/var/lib/aptly
 
-echo "Creating user aptly with UID $USER_ID"
+echo "Creating user aptly with UID $USER_ID" 1>&2
 getent group aptly >/dev/null || groupadd --system -g $GROUP_ID aptly
 getent passwd aptly >/dev/null || useradd --system --shell /bin/bash -u $USER_ID -g aptly -d ${HOME} -m aptly
 
 if [ $(stat -c '%u' ${HOME}) != $USER_ID ]; then
-    echo "Fixing ${HOME} permissions.."
+    echo "Fixing ${HOME} permissions.." 1>&2
     chown -R aptly:aptly ${HOME}
 fi
 
 if [ ! -e ${HOME}/.gnupg ]; then
-    echo "Generating new GPG keypair.."
+    echo "Generating new GPG keypair.." 1>&2
     [ -e ${HOME}/gpg_batch ] || cat << EOF > ${HOME}/gpg_batch
 %echo Generating a default key
 Key-Type: RSA
@@ -35,13 +35,13 @@ Expire-Date: 0
 EOF
     gosu aptly bash -c "$GPG_BINARY --batch --gen-key ${HOME}/gpg_batch"
 
-    echo "Importing distribution keyring.."
+    echo "Importing distribution keyring.." 1>&2
     gosu aptly bash -c "for i in /usr/share/keyrings/*; do $GPG_BINARY --no-default-keyring --keyring \$i --export | $GPG_BINARY --import; done"
 
-    echo "Storing public key in ${HOME}/public/public.gpg"
+    echo "Storing public key in ${HOME}/public/public.gpg" 1>&2
     [ -d ${HOME}/public ] || gosu aptly bash -c "mkdir ${HOME}/public"
     if [ $(stat -c '%u' ${HOME}/public) != $USER_ID ]; then
-        echo "Fixing ${HOME}/public permissions.."
+        echo "Fixing ${HOME}/public permissions.." 1>&2
         chown -R aptly:aptly ${HOME}/public
     fi
     [ -e ${HOME}/public/public.gpg ] || gosu aptly bash -c "$GPG_BINARY --armor --export ${EMAIL_ADDRESS} > ${HOME}/public/public.gpg"
