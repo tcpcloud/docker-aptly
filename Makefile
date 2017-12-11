@@ -8,13 +8,13 @@ aptly:
 	@echo "== Building $(ORG)/aptly .."
 	(cd docker; docker build --no-cache -t $(ORG)/aptly -f aptly.Dockerfile .)
 	@echo "== Tagging $(ORG)/aptly .."
-	docker tag $(ORG)/aptly $(ORG)/aptly:$$(docker run --entrypoint=/usr/bin/aptly $(ORG)/aptly version|awk '{print $$3}'|tr -d '\r')
+	docker tag $(ORG)/aptly $(ORG)/aptly-api:$$(docker run --entrypoint=/usr/bin/aptly $(ORG)/aptly version|awk '{print $$3}'|tr -d '\r'|sed s,+,-,g)
 
 aptly-api: aptly
 	@echo "== Building $(ORG)/aptly-api .."
 	(cd docker; docker build -t $(ORG)/aptly-api -f aptly-api.Dockerfile .)
 	@echo "== Tagging $(ORG)/aptly-api .."
-	docker tag $(ORG)/aptly-api $(ORG)/aptly-api:$$(docker run --entrypoint=/usr/bin/aptly $(ORG)/aptly-api version|awk '{print $$3}'|tr -d '\r')
+	docker tag $(ORG)/aptly-api $(ORG)/aptly-api:$$(docker run --entrypoint=/usr/bin/aptly $(ORG)/aptly-api version|awk '{print $$3}'|tr -d '\r'|sed s,+,-,g)
 
 aptly-publisher:
 	@echo "== Building $(ORG)/aptly-publisher .."
@@ -28,9 +28,9 @@ aptly-public:
 
 push:
 	docker push $(ORG)/aptly
-	docker push $(ORG)/aptly:$$(docker run --entrypoint=/usr/bin/aptly $(ORG)/aptly-api version|awk '{print $$3}'|tr -d '\r')
+	docker push $(ORG)/aptly:$$(docker run --entrypoint=/usr/bin/aptly $(ORG)/aptly version|awk '{print $$3}'|tr -d '\r'|sed s,+,-,g)
 	docker push $(ORG)/aptly-api
-	docker push $(ORG)/aptly-api:$$(docker run --entrypoint=/usr/bin/aptly $(ORG)/aptly-api version|awk '{print $$3}'|tr -d '\r')
+	docker push $(ORG)/aptly-api:$$(docker run --entrypoint=/usr/bin/aptly $(ORG)/aptly-api version|awk '{print $$3}'|tr -d '\r'|sed s,+,-,g)
 	docker push $(ORG)/aptly-publisher
 	docker push $(ORG)/aptly-publisher:$$(docker run --entrypoint=/usr/bin/pip $(ORG)/aptly-publisher show python-aptly --disable-pip-version-check|grep Version:|awk '{print $$2}'|tr -d '\r')
 	docker push $(ORG)/aptly-public
