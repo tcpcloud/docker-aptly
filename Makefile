@@ -1,12 +1,13 @@
 #!/usr/bin/env make -f
 
 ORG ?= tcpcloud
+DIST ?= squeeze
 
 all: aptly aptly-api aptly-publisher aptly-public
 
 aptly:
 	@echo "== Building $(ORG)/aptly .."
-	(cd docker; docker build --no-cache -t $(ORG)/aptly -f aptly.Dockerfile .)
+	(cd docker; docker build --no-cache --build-arg DIST=$(DIST) -t $(ORG)/aptly -f aptly.Dockerfile .)
 	@echo "== Tagging $(ORG)/aptly .."
 	docker tag $(ORG)/aptly $(ORG)/aptly-api:$$(docker run --entrypoint=/usr/bin/aptly $(ORG)/aptly version|awk '{print $$3}'|tr -d '\r'|sed s,+,-,g)
 

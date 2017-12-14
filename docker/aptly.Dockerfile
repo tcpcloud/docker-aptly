@@ -1,7 +1,7 @@
 FROM debian:stretch
 
+ARG DIST=squeeze
 ENV DEBIAN_FRONTEND noninteractive
-
 
 # Install aptly and required tools
 RUN apt-get -q update                     \
@@ -14,7 +14,7 @@ RUN apt-get -q update                     \
                           xz-utils        \
                           gosu            \
                           ubuntu-archive-keyring \
-    && echo "deb http://repo.aptly.info/ squeeze main" > /etc/apt/sources.list.d/aptly.list \
+    && echo "deb http://repo.aptly.info/ $DIST main" > /etc/apt/sources.list.d/aptly.list \
     && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9E3E53F19C7DE460 \
     && apt-get update \
     && apt-get -y install aptly \
