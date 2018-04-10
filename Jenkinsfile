@@ -24,25 +24,25 @@ node("docker") {
       }
       stage("build") {
         common.infoMsg("Building aptly")
-        aptly = dockerLib.buildDockerImage("tcpcloud/aptly", "", "docker/aptly.Dockerfile", imageTagsList[0])
+        aptly = dockerLib.buildDockerImage("mirantis/aptly", "", "docker/aptly.Dockerfile", imageTagsList[0])
         if(!aptly){
           throw new Exception("Docker aptly build image failed")
         }
 
         common.infoMsg("Building aptly-api ")
-        aptlyApi = dockerLib.buildDockerImage("tcpcloud/aptly-api", "", "docker/aptly-api.Dockerfile", imageTagsList[0])
+        aptlyApi = dockerLib.buildDockerImage("mirantis/aptly-api", "", "docker/aptly-api.Dockerfile", imageTagsList[0])
         if(!aptlyApi){
           throw new Exception("Docker aptly-api build image failed")
         }
 
         common.infoMsg("Building aptly-publisher")
-        aptlyPublisher = dockerLib.buildDockerImage("tcpcloud/aptly-publisher", "", "docker/aptly-publisher.Dockerfile", imageTagsList[0])
+        aptlyPublisher = dockerLib.buildDockerImage("mirantis/aptly-publisher", "", "docker/aptly-publisher.Dockerfile", imageTagsList[0])
         if(!aptlyPublisher){
           throw new Exception("Docker aptly-publisher build image failed")
         }
 
         common.infoMsg("Building aptly-public")
-        aptlyPublic = dockerLib.buildDockerImage("tcpcloud/aptly-public", "", "docker/aptly-public.Dockerfile", imageTagsList[0])
+        aptlyPublic = dockerLib.buildDockerImage("mirantis/aptly-public", "", "docker/aptly-public.Dockerfile", imageTagsList[0])
         if(!aptlyPublic){
           throw new Exception("Docker aptly-public build image failed")
         }

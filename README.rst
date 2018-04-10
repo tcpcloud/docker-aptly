@@ -42,13 +42,13 @@ Run aptly API:
 
 .. code-block:: bash
 
-    docker run -v /srv/aptly:/var/lib/aptly tcpcloud/aptly-api
+    docker run -v /srv/aptly:/var/lib/aptly mirantis/aptly-api
 
 Run aptly action, eg. list repos:
 
 .. code-block:: bash
 
-    docker run -it -v /srv/aptly:/var/lib/aptly tcpcloud/aptly-api aptly repo list
+    docker run -it -v /srv/aptly:/var/lib/aptly mirantis/aptly-api aptly repo list
 
 aptly-public
 ============
@@ -64,7 +64,7 @@ eg.:
 
 .. code-block:: bash
 
-    docker run -v /srv/aptly/public:/var/www:ro tcpcloud/aptly-public
+    docker run -v /srv/aptly/public:/var/www:ro mirantis/aptly-public
 
 aptly-publisher
 ===============
@@ -79,7 +79,7 @@ Run using docker:
 
 .. code-block:: bash
 
-    docker run -it tcpcloud/aptly-publisher --help
+    docker run -it mirantis/aptly-publisher --help
 
 Or create ``/usr/local/bin/aptly-publisher`` with following:
 
@@ -87,7 +87,7 @@ Or create ``/usr/local/bin/aptly-publisher`` with following:
 
     #!/bin/bash -e
 
-    docker run -v $(pwd):/var/run/aptly-publisher:ro -it tcpcloud/aptly-publisher $@
+    docker run -v $(pwd):/var/run/aptly-publisher:ro -it mirantis/aptly-publisher $@
 
 and set exec permissions with ``chmod +x /usr/local/bin/aptly-publisher``.
 Then you are able to use config file in your current directory.

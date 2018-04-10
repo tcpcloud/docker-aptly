@@ -1,6 +1,6 @@
 #!/usr/bin/env make -f
 
-ORG ?= tcpcloud
+ORG ?= mirantis
 DIST ?= squeeze
 
 all: aptly aptly-api aptly-publisher aptly-public
